@@ -23,7 +23,7 @@ class PaintingContainer extends Component {
         </div>
         <div className="ten wide column">
           {this.props.activePainting ? (
-            <PaintingShow painting={this.props.activePainting} />
+            <PaintingShow painting={this.props.activePainting} deletePainting={this.props.deletePainting}/>
           ) : (
             <h3>select a painting</h3>
           )}
@@ -34,7 +34,7 @@ class PaintingContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  paintings: state.paintings,
+  paintings: state.paintings.filter(painting => painting.museum.id === state.selectedMuseumId || state.selectedMuseumId === false),
   activePainting: state.paintings.find(p => p.id === state.activePaintingId)
 });
 
