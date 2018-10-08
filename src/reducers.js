@@ -1,10 +1,17 @@
-import { combineReducers } from 'redux';
-import { FETCH_PAINTINGS, SELECT_ACTIVE_PAINTING } from './actions/types';
+import { combineReducers } from "redux";
+import {
+  FETCH_PAINTINGS,
+  SELECT_ACTIVE_PAINTING,
+  DELETE_ACTIVE_PAINTING,
+  FILTER_ACTIVE_PAINTING
+} from "./actions/types";
 
 const paintingsReducer = (state = [], action) => {
   switch (action.type) {
     case FETCH_PAINTINGS:
       return [...action.payload];
+    case DELETE_ACTIVE_PAINTING:
+      return state.filter(painting => action.id !== painting.id);
     default:
       return state;
   }
@@ -12,6 +19,8 @@ const paintingsReducer = (state = [], action) => {
 
 const activePaintingIdReducer = (state = null, action) => {
   switch (action.type) {
+    case FETCH_PAINTINGS:
+      return action.payload[0].id;
     case SELECT_ACTIVE_PAINTING:
       return action.id;
     default:
@@ -19,9 +28,19 @@ const activePaintingIdReducer = (state = null, action) => {
   }
 };
 
+const selectedMuseumReducer = (state = false, action) => {
+  switch (action.type) {
+    case FILTER_ACTIVE_PAINTING:
+      return action.id;
+      break;
+  }
+  return state;
+};
+
 const rootReducer = combineReducers({
   paintings: paintingsReducer,
-  activePaintingId: activePaintingIdReducer
+  activePaintingId: activePaintingIdReducer,
+  selectedMuseumID: selectedMuseumReducer
 });
 
 // NOTE:
