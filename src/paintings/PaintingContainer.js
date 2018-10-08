@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PaintingList from './PaintingList';
-import PaintingShow from './PaintingShow';
-import * as actions from '../actions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import PaintingList from "./PaintingList";
+import PaintingShow from "./PaintingShow";
+import * as actions from "../actions";
 // NOTE: actions is a directory.
 // By default import will look for a file called index.js in any directory
 
@@ -16,6 +16,7 @@ class PaintingContainer extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <div className="row">
         <div className="six wide column">
@@ -23,7 +24,10 @@ class PaintingContainer extends Component {
         </div>
         <div className="ten wide column">
           {this.props.activePainting ? (
-            <PaintingShow painting={this.props.activePainting} />
+            <PaintingShow
+              painting={this.props.activePainting}
+              deletePainting={this.props.deletePainting}
+            />
           ) : (
             <h3>select a painting</h3>
           )}
@@ -34,11 +38,18 @@ class PaintingContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  paintings: state.paintings,
+  paintings: state.paintings.filter(
+    painting =>
+      painting.museum.id === state.selectedMuseumID ||
+      state.selectedMuseumID === false
+  ),
   activePainting: state.paintings.find(p => p.id === state.activePaintingId)
 });
 
-export default connect(mapStateToProps, actions)(PaintingContainer);
+export default connect(
+  mapStateToProps,
+  actions
+)(PaintingContainer);
 // NOTE: here we're using the shorthand syntax for mapDispatchToProps
 // (This is the recommended way to do this)
 // it works like this:
